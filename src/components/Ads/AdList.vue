@@ -1,8 +1,8 @@
 <template>
   <v-container>
     <v-layout row>
-      <v-flex xs12>
-        <h1>AdList</h1>
+      <v-flex xs12 sm6 offset-sm3>
+        <h1 class="mb-3">My ads</h1>
       </v-flex>
     </v-layout>
   </v-container>
