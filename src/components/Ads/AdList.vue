@@ -7,7 +7,7 @@
         <v-card
             class="mx-auto mb-8"
             max-width="344"
-            v-for="ad of ads"
+            v-for="ad of myAds"
             :key="ad.id"
             elevation="12"
           >
@@ -43,31 +43,9 @@
 
 <script>
 export default {
-  data () {
-    return {
-      ads: [
-        {
-          title: 'squirrel',
-          description: 'Hello i am description',
-          promo: false,
-          imageSrc: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-          id: '10'
-        },
-        {
-          title: 'squirrel',
-          description: 'Hello i am description',
-          promo: false,
-          imageSrc: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-          id: '10'
-        },
-        {
-          title: 'squirrel',
-          description: 'Hello i am description',
-          promo: false,
-          imageSrc: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-          id: '10'
-        }
-      ]
+  computed: {
+    myAds () {
+      return this.$store.getters.myAds
     }
   }
 }

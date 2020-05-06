@@ -43,7 +43,7 @@
 
         <v-layout row wrap>
           <v-flex xs12>
-            <img src="https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg" alt="" height="100">
+            <img src="" height="100">
           </v-flex>
         </v-layout>
 
@@ -51,7 +51,7 @@
           <v-flex xs12>
             <v-switch
               v-model="promo"
-              label="Add to promo"
+              label="Add to promo?"
               color="success"
             ></v-switch>
           </v-flex>
@@ -86,19 +86,19 @@ export default {
   methods: {
     createAd () { // Проверяем, валидна ли форма
       if (this.$refs.form.validate()) {
-        const newAd = {
+        const ad = {
           title: this.title,
           description: this.description,
-          promo: this.promo
+          promo: this.promo,
+          imageSrc: 'https://jetruby.com/ru/blog/wp-content/uploads/2017/08/vue.js-e1503668330344.png'
         }
-
-        console.log(newAd)
+        this.$store.dispatch('createAd', ad)
       }
     }
   }
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="scss" scoped>
 
 </style>
