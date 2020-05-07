@@ -53,6 +53,29 @@
     <v-content>
       <router-view></router-view>
     </v-content>
+    <!-- тут мы будем показывать Snackbar -->
+    <!-- в input, будем вызывать метод closeError, который позволит при клике закрыть данный snackBar -->
+    <template
+      v-if="error"
+    >
+    <!-- Показываем этот snackBar, токлько когда будет какой-то error(true) (Обернули все в template)-->
+      <v-snackbar
+        :color="error"
+        :multi-line="true"
+        :timeout="10000"
+        @input="closeError"
+        :value="true"
+      >
+      <!-- Тут буем показывать переменную что описали в computed свойстве -->
+      {{error}}
+        <v-btn
+          dark
+          @click.native="closeError"
+        >
+          Close
+        </v-btn>
+      </v-snackbar>
+    </template>
   </v-app>
 </template>
 
@@ -88,6 +111,16 @@ export default {
           url: '/list'
         }
       ]
+    }
+  },
+  computed: {
+    error () { // мы обращаемся к getters из shared, если есть какая-то ошибка будем ее здесь получать!
+      return this.$store.getters.error
+    }
+  },
+  methods: {
+    closeError () { // обращаемся к стору и Диспачим action cliarError (По сути, просто будем очишать ошибку и Она не должна показыватся)
+      this.$store.dispatch('clearError')
     }
   }
 }

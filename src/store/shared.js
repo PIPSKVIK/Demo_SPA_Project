@@ -1,4 +1,4 @@
-export default {
+export default { // этот стор отвечает за общие вещи, вывод ошибок и показ state Loading (когад идет какая-то загрузка).
   state: {
     loading: false,
     error: null

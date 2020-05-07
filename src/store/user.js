@@ -1,7 +1,7 @@
 import * as fb from 'firebase'
 
 class User {
-  constructor (id) {
+  constructor (id) { // Будем создавать новый объект используя таку конструкци.
     this.id = id
   }
 }
@@ -20,13 +20,26 @@ export default {
       commit('clearError')
       commit('setLoading', true)
       try {
-        const user = await fb.auth().createUserWithEmailAndPassword(email, password)
+        const user = await fb.auth().createUserWithEmailAndPassword(email, password) // Обязательно юзаем этот метод
         commit('setUser', new User(user.uid))
         commit('setLoading', false)
       } catch (error) {
         commit('setLoading', false)
         commit('setError', error.message)
         throw error
+      }
+    },
+    async loginUser ({ commit }, { email, password }) { // Логин зарегистрировавшего пользователя.
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        const user = await fb.auth().signInWithEmailAndPassword(email, password) // обязательно к использованию этот метод
+        commit('setUser', new User(user.uid))
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message) // Это в самой консоле будет такое сообщение
+        throw error //  throw позволяет генерировать исключения, определяемые пользователем. При этом выполнение текущей функции будет остановлено
       }
     }
   },
