@@ -41,11 +41,21 @@ export default {
         commit('setError', error.message) // Это в самой консоле будет такое сообщение
         throw error //  throw позволяет генерировать исключения, определяемые пользователем. При этом выполнение текущей функции будет остановлено
       }
+    },
+    autoLoginUser ({ commit }, payload) {
+      commit('setUser', new User(payload.uid))
+    },
+    logoutUser ({ commit }, payload) {
+      fb.auth().signOut()
+      commit('setUser', null)
     }
   },
   getters: {
     user (state) {
       return state.user
-    }
+    },
+    isUserLoggIn (state) { // Этот метод, нам будет позволяит прятать ненужные кнопки, когда user залогинелся!
+      return state.user !== null // возвращаем, если юзер на равен nuul, то пользвователь зарегистрирован!
+    } // Проверять это будем в App компоненте, так как у нас все!
   }
 }

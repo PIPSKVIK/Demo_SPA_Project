@@ -12,12 +12,24 @@
           <v-list-item-icon>
             <v-icon> {{link.icon}} </v-icon>
           </v-list-item-icon>
-
           <v-list-item-content>
             <v-list-item-title v-text='link.title'></v-list-item-title>
           </v-list-item-content>
-
         </v-list-item>
+        <!-- ссылка на logout -->
+        <v-list-item
+          color="deep-purple accent-4"
+          @click="onLogout"
+          v-if="isUserLoggIn"
+        >
+          <v-list-item-icon>
+            <v-icon>mdi-exit-to-app</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>logout</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <!-- ссылка на logout -->
       </v-list>
     </v-navigation-drawer>
 <!-- app-bar start -->
@@ -46,6 +58,18 @@
             <v-icon left>{{ link.icon }}</v-icon>
             {{ link.title }}
           </v-btn>
+
+          <!-- ссылка logOut -->
+          <v-btn
+            class="pt-2 pb-2"
+            outlined
+            @click="onLogout"
+            v-if="isUserLoggIn"
+          >
+            <v-icon left>mdi-exit-to-app</v-icon>
+            logout
+          </v-btn>
+
         </div>
       </v-app-bar>
     </div>
@@ -66,8 +90,8 @@
         @input="closeError"
         :value="true"
       >
-      <!-- Тут буем показывать переменную что описали в computed свойстве -->
-      {{error}}
+        <!-- Тут буем показывать переменную что описали в computed свойстве -->
+        {{error}}
         <v-btn
           dark
           @click.native="closeError"
@@ -83,8 +107,37 @@
 export default {
   data () {
     return {
-      drawer: false,
-      links: [
+      drawer: false // Убирем отсюда Link массив
+    }
+  },
+  computed: {
+    error () { // мы обращаемся к getters из shared, если есть какая-то ошибка будем ее здесь получать!
+      return this.$store.getters.error
+    },
+    isUserLoggIn () {
+      return this.$store.getters.isUserLoggIn
+    }, // Как нам изменить меню, в зависимости от этой переменной links?
+    links () { // и тут будем проверять, если у нас пользователь залогинен - вернем один массив если не сработает то другой массив. (Изииии)
+      if (this.isUserLoggIn) {
+        return [ // когда пользователь зареган
+          {
+            title: 'Orders',
+            icon: 'mdi-bookmark-outline',
+            url: '/orders'
+          },
+          {
+            title: 'New ad',
+            icon: 'mdi-plus-circle-outline',
+            url: '/new'
+          },
+          {
+            title: 'My ads',
+            icon: 'mdi-format-list-bulleted-square',
+            url: '/list'
+          }
+        ]
+      }
+      return [ // когда пользователь не зареган
         {
           title: 'Login',
           icon: 'mdi-lock',
@@ -94,33 +147,17 @@ export default {
           title: 'Registration',
           icon: 'mdi-account-multiple-plus-outline',
           url: '/registration'
-        },
-        {
-          title: 'Orders',
-          icon: 'mdi-bookmark-outline',
-          url: '/orders'
-        },
-        {
-          title: 'New ad',
-          icon: 'mdi-plus-circle-outline',
-          url: '/new'
-        },
-        {
-          title: 'My ads',
-          icon: 'mdi-format-list-bulleted-square',
-          url: '/list'
         }
       ]
     }
-  },
-  computed: {
-    error () { // мы обращаемся к getters из shared, если есть какая-то ошибка будем ее здесь получать!
-      return this.$store.getters.error
-    }
-  },
+  }, // Нужно завести еще одно computed свойство links - как и называется в поле date
   methods: {
     closeError () { // обращаемся к стору и Диспачим action cliarError (По сути, просто будем очишать ошибку и Она не должна показыватся)
       this.$store.dispatch('clearError')
+    },
+    onLogout () {
+      this.$store.dispatch('logoutUser')
+      this.$router.push('/')
     }
   }
 }
